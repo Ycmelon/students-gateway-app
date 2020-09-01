@@ -8,6 +8,7 @@ import {
   Text,
   Button,
   Divider,
+  ActivityIndicator,
 } from "react-native-paper";
 import { WebView } from "react-native-webview";
 
@@ -28,7 +29,8 @@ class HomeScreen extends React.Component {
       // </View>
       <ScrollView>
         <View style={{ margin: 16 }}>
-          <Card onPress={() => this.props.navigation.navigate("PostScreen")}>
+          <ActivityIndicator />
+          {/* <Card onPress={() => this.props.navigation.navigate("PostScreen")}>
             <Card.Content>
               <View
                 style={{
@@ -153,7 +155,7 @@ class HomeScreen extends React.Component {
               </View>
             </Card.Content>
           </Card>
-          <Br />
+          <Br /> */}
         </View>
       </ScrollView>
     );

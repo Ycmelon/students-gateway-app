@@ -10,21 +10,27 @@ import {
   Divider,
   ActivityIndicator,
   TextInput,
+  HelperText,
 } from "react-native-paper";
 import { WebView } from "react-native-webview";
 import { apiUrl } from "../constants";
 
 import { Br } from "../components";
+import GLOBAL from "../global";
+import { StatusBar } from "expo-status-bar";
 
 class AuthenticateScreen extends React.Component {
   state = {
     username: null,
     password: null,
+    error: false,
   };
   webview = null;
 
   login() {
+    this.setState({ error: false });
     if (this.state.username && this.state.password) {
+      this.setState({ loading: true });
       fetch(apiUrl + "/auth/", {
         method: "POST",
         headers: {
@@ -37,36 +43,65 @@ class AuthenticateScreen extends React.Component {
         }),
       })
         .then((response) => {
-          if (response.status == 200) {
-            this.props.route.params.complete();
-          } else if (response.status == 403) {
-            alert("Incorrect username/password!");
-          } else {
-            alert("Unknown error: " + response.status);
-          }
+          response.json().then((responseJson) => {
+            if (response.status == 200) {
+              if (responseJson.user_type != "admin") {
+                GLOBAL.app.setState({ isSignedIn: true });
+              } else {
+                this.setState({
+                  error:
+                    "You have an admin account! Please use the website instead.",
+                });
+              }
+            } else if (response.status == 403) {
+              this.setState({ error: "Incorrect username/password!" });
+            } else if (responseJson.message) {
+              this.setState({
+                error: "Error (response): " + responseJson.message,
+              });
+            } else {
+              this.setState({ error: "Unknown error: " + response.status });
+            }
+          });
         })
-        .catch((e) => alert("Unknown error: " + e));
+        .catch((e) => this.setState({ error: "Unknown error: " + e }))
+        .then(() => {
+          this.setState({ loading: false });
+        });
     } else {
-      alert("Please fill in all inputs!");
+      this.setState({ error: "Please fill in all fields!" });
     }
   }
 
   render() {
     return (
       <View style={{ margin: 16 }}>
+        <StatusBar style="light" />
         <TextInput
           label="Username"
           value={this.state.username}
           onChangeText={(text) => this.setState({ username: text })}
+          autoCompleteType="username"
         />
         <Br />
         <TextInput
           label="Password"
           value={this.state.password}
           onChangeText={(text) => this.setState({ password: text })}
+          autoCompleteType="password"
+          secureTextEntry={true}
+          // keyboardAppearance
         />
+        <HelperText type="error" visible={this.state.error}>
+          {this.state.error}
+        </HelperText>
         <Br />
-        <Button mode="contained" onPress={() => this.login()}>
+        <Button
+          mode="contained"
+          onPress={() => this.login()}
+          loading={this.state.loading}
+          disabled={this.state.loading}
+        >
           Login
         </Button>
       </View>

@@ -16,6 +16,7 @@ import { WebView } from "react-native-webview";
 import { apiUrl } from "../constants";
 
 import { Br } from "../components";
+import { StatusBar } from "expo-status-bar";
 
 class OnboardingScreen extends React.Component {
   state = {
@@ -34,18 +35,20 @@ class OnboardingScreen extends React.Component {
           flex: 1,
         }}
       >
+        <StatusBar style="dark" />
         <View
           style={{
             alignSelf: "center",
             flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Image
-            style={{ height: 100, width: 100, alignSelf: "center" }}
+            style={{ height: 200, width: 300, alignSelf: "center" }}
             source={{
               uri:
-                "https://lh3.googleusercontent.com/04qDFFVuV1EnVaOxtlrRC216Tgg-jxZnVA_DAkLrVtMKGRa4ZcCX019KDkOxz9uLGFED=s360-rw",
+                "https://static.vecteezy.com/system/resources/thumbnails/000/238/880/original/dog-lover-happy-family-vector-flat-illustration.png",
             }}
           />
           <Br />
@@ -54,6 +57,7 @@ class OnboardingScreen extends React.Component {
           <Br />
           <Button
             mode="contained"
+            // style={{ width: 200 }}
             onPress={() => this.props.navigation.navigate("AuthenticateScreen")}
           >
             Log in

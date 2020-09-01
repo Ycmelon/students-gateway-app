@@ -3,6 +3,10 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import * as BackgroundFetch from "expo-background-fetch";
+import * as TaskManager from "expo-task-manager";
+import * as Notifications from "expo-notifications";
+
 import {
   Provider as PaperProvider,
   Appbar,
@@ -15,7 +19,9 @@ import {
   PostScreen,
   AuthenticateScreen,
   OnboardingScreen,
+  SettingsScreen,
 } from "./screens";
+import GLOBAL from "./global.js";
 
 const LightTheme = {
   ...DefaultTheme,
@@ -35,12 +41,28 @@ const DarkTheme_ = {
   },
 };
 
-const dark = false;
+const dark = true;
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
+TaskManager.defineTask("getNotifications", () => {
+  console.log("Get notifications!");
+  return BackgroundFetch.Result.NewData;
+});
+
 export default class App extends React.Component {
   state = { isSignedIn: false };
+
+  constructor(props) {
+    super(props);
+    GLOBAL.app = this;
+  }
+
+  componentDidMount() {
+    BackgroundFetch.registerTaskAsync("getNotifications", {
+      startOnBoot: true,
+    });
+  }
 
   render() {
     return (
@@ -80,9 +102,7 @@ export default class App extends React.Component {
                 <Stack.Screen
                   name="AuthenticateScreen"
                   component={AuthenticateScreen}
-                  initialParams={{
-                    complete: () => this.setState({ isSignedIn: true }),
-                  }}
+                  options={{ title: "Log in" }}
                 />
               </>
             ) : (
@@ -90,7 +110,7 @@ export default class App extends React.Component {
                 <Stack.Screen
                   name="Tabs"
                   component={Tabs}
-                  options={{ title: "Home" }}
+                  options={{ title: "Students' Gateway" }}
                 />
                 <Stack.Screen
                   name="PostScreen"
@@ -132,7 +152,7 @@ class Tabs extends React.Component {
         />
         <Tab.Screen
           name="Settings"
-          component={HomeScreen}
+          component={SettingsScreen}
           options={{ tabBarIcon: "settings" }}
         />
       </Tab.Navigator>

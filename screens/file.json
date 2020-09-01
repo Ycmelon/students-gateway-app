@@ -1,0 +1,32 @@
+{
+  "type": "default",
+  "status": 200,
+  "ok": true,
+  "headers": {
+    "map": {
+      "content-length": "80",
+      "content-type": "application/json",
+      "date": "Tue, 01 Sep 2020 06:50:29 GMT",
+      "server": "Werkzeug/1.0.1 Python/3.8.0",
+      "cache-control": "public, max-age=0"
+    }
+  },
+  "url": "http://10.167.86.92//api/auth/",
+  "bodyUsed": false,
+  "_bodyInit": {
+    "_data": {
+      "size": 80,
+      "offset": 0,
+      "blobId": "eaa2c544-dbfc-4869-bf80-c48310d43854",
+      "__collector": {}
+    }
+  },
+  "_bodyBlob": {
+    "_data": {
+      "size": 80,
+      "offset": 0,
+      "blobId": "eaa2c544-dbfc-4869-bf80-c48310d43854",
+      "__collector": {}
+    }
+  }
+}
