@@ -1,4 +1,4 @@
-# 👪 Students Gateway - Y3 CEP Final Project
+# 👪 Students Gateway (App) - Y3 CEP Final Project
 
 ![React Native](https://img.shields.io/badge/made%20with-React%20Native-900.svg)
 ![GitHub licence](https://img.shields.io/github/license/Ycmelon/students-gateway-app?color=900)
