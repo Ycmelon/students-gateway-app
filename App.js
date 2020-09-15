@@ -6,6 +6,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import * as BackgroundFetch from "expo-background-fetch";
 import * as TaskManager from "expo-task-manager";
 import * as Notifications from "expo-notifications";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import {
   Provider as PaperProvider,
@@ -41,7 +42,7 @@ const DarkTheme_ = {
   },
 };
 
-const dark = true;
+const dark = false;
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -56,6 +57,12 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     GLOBAL.app = this;
+    AsyncStorage.getItem("@username").then((value) => {
+      if (value) {
+        GLOBAL.username = value;
+        this.setState({ isSignedIn: true });
+      }
+    });
   }
 
   componentDidMount() {
@@ -68,7 +75,7 @@ export default class App extends React.Component {
     return (
       <PaperProvider theme={dark ? DarkTheme_ : LightTheme}>
         <NavigationContainer theme={dark ? DarkTheme_ : LightTheme}>
-          <StatusBar style="light" />
+          <StatusBar style="light" backgroundColor="#800" />
           <Stack.Navigator
             // mode="modal"
             headerMode="screen"
@@ -145,11 +152,14 @@ class Tabs extends React.Component {
           component={HomeScreen}
           options={{ tabBarIcon: "format-list-checkbox" }}
         />
-        <Tab.Screen
+        {
+          // Future
+          /* <Tab.Screen
           name="2FA?"
           component={HomeScreen}
           options={{ tabBarIcon: "key-variant" }}
-        />
+        /> */
+        }
         <Tab.Screen
           name="Settings"
           component={SettingsScreen}

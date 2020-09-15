@@ -12,6 +12,7 @@ import {
   TextInput,
   HelperText,
 } from "react-native-paper";
+import AsyncStorage from "@react-native-community/async-storage";
 import { WebView } from "react-native-webview";
 import { apiUrl } from "../constants";
 
@@ -28,8 +29,11 @@ class AuthenticateScreen extends React.Component {
   webview = null;
 
   login() {
+    const username = this.state.username;
+    const password = this.state.password;
+
     this.setState({ error: false });
-    if (this.state.username && this.state.password) {
+    if (username && password) {
       this.setState({ loading: true });
       fetch(apiUrl + "/auth/", {
         method: "POST",
@@ -38,15 +42,18 @@ class AuthenticateScreen extends React.Component {
         },
         body: JSON.stringify({
           key: "students-gateway-admin",
-          username: this.state.username.toLowerCase(),
-          password: this.state.password,
+          username: username.toLowerCase(),
+          password: password,
         }),
       })
         .then((response) => {
           response.json().then((responseJson) => {
             if (response.status == 200) {
               if (responseJson.user_type != "admin") {
-                GLOBAL.app.setState({ isSignedIn: true });
+                // Success
+                AsyncStorage.setItem("@username", username).then(() => {
+                  GLOBAL.app.setState({ isSignedIn: true });
+                });
               } else {
                 this.setState({
                   error:

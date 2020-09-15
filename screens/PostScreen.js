@@ -13,18 +13,68 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 
 class PostScreen extends React.Component {
+  state = { loading: false };
+
+  postResponse(response) {
+    this.setState({ loading: true });
+    console.log(response);
+  }
+
   render() {
+    const post = this.props.route.params.post;
+    const date = new Date(post.date * 1000).toLocaleString();
+
     return (
       <View flex={1}>
         <ScrollView>
           <View style={{ margin: 16 }}>
             <Card>
               <Card.Content>
+                <>
+                  <View
+                    style={{
+                      backgroundColor: "red",
+                      alignSelf: "flex-start",
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      borderRadius: 4,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Respond by {post.due_date}
+                    </Text>
+                  </View>
+                  <Br />
+                </>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                  National Day Parade Preview
+                  {post.title}
                 </Text>
-                <Text style={{ fontSize: 16 }}>RIMBokai - Y3 Bio</Text>
                 <Br />
+                <View style={{ flexDirection: "row" }}>
+                  <MaterialCommunityIcons
+                    name="account-edit"
+                    size={16}
+                    style={{ alignSelf: "center", marginRight: 8 }}
+                  />
+                  <Text style={{ fontSize: 16, marginBottom: 4 }}>
+                    {post.author_name}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row" }}>
+                  <MaterialCommunityIcons
+                    name="account-group"
+                    size={16}
+                    style={{ alignSelf: "center", marginRight: 8 }}
+                  />
+                  <Text style={{ fontSize: 16, marginBottom: 4 }}>
+                    {post.group_name}
+                  </Text>
+                </View>
                 <View style={{ flexDirection: "row" }}>
                   <MaterialCommunityIcons
                     name="map-marker"
@@ -41,23 +91,19 @@ class PostScreen extends React.Component {
                     size={16}
                     style={{ alignSelf: "center", marginRight: 8 }}
                   />
-                  <Text style={{ fontSize: 16 }}>19th July 1996</Text>
+                  <Text style={{ fontSize: 16 }}>Posted on {date}</Text>
                 </View>
               </Card.Content>
             </Card>
             <Br />
             <Card>
               <Card.Content>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  Event details
-                </Text>
-                <Text>
-                  Lorem Ipsum，也称乱数假文或者哑元文本，
-                  是印刷及排版领域所常用的虚拟文字。由于曾经一台匿名的打印机刻意打乱了一盒印刷字体从而造出一本字体样品书，Lorem
-                  Ipsum从西元15世纪起就被作为此领域的标准文本使用。它不仅延续了五个世纪，还通过了电子排版的挑战，其雏形却依然保存至今。在1960年代，”Leatraset”公司发布了印刷着Lorem
-                  Ipsum段落的纸张，从而广泛普及了它的使用。最近，计算机桌面出版软件”Aldus
-                  PageMaker”也通过同样的方式使Lorem Ipsum落入大众的视野。
-                </Text>
+                <Subheading>Details</Subheading>
+                <View style={{ flexDirection: "column" }}>
+                  {post.body.split("\\n").map((line, index) => {
+                    return <Text key={index}>{line}</Text>;
+                  })}
+                </View>
               </Card.Content>
             </Card>
             {/* <Br />
@@ -71,17 +117,43 @@ class PostScreen extends React.Component {
                 style={{ height: 10000 }}
               />
             </Card> */}
+            <Br />
+            <Card>
+              <Card.Content>
+                {/* <Subheading>Response</Subheading> */}
+                <View style={{ flexDirection: "row" }}>
+                  {false ? (
+                    <Text>You've responded with: Yes</Text>
+                  ) : (
+                    <>
+                      <Button
+                        flex={1}
+                        mode="outlined"
+                        style={{ marginRight: 16 }}
+                        icon="check"
+                        onPress={() => this.postResponse(true)}
+                        disabled={this.state.loading}
+                        loading={this.state.loading}
+                      >
+                        Yes
+                      </Button>
+                      <Button
+                        flex={1}
+                        mode="outlined"
+                        icon="close"
+                        onPress={() => this.postResponse(false)}
+                        disabled={this.state.loading}
+                        loading={this.state.loading}
+                      >
+                        No
+                      </Button>
+                    </>
+                  )}
+                </View>
+              </Card.Content>
+            </Card>
           </View>
         </ScrollView>
-        <Appbar style={{ bottom: 0, justifyContent: "space-between" }}>
-          <Text style={{ color: "white" }}>Due: Very Soon</Text>
-          <View style={{ flexDirection: "row" }}>
-            <Button mode="contained" color="white">
-              Yes
-            </Button>
-            <Button mode="contained">No</Button>
-          </View>
-        </Appbar>
       </View>
     );
   }

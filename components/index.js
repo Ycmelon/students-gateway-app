@@ -1,3 +1,4 @@
 import Br from "./Br";
+import PostCard from "./PostCard";
 
-export { Br };
+export { Br, PostCard };

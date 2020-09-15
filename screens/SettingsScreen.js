@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Alert, FlatList } from "react-native";
 import {
   withTheme,
   Card,
@@ -10,13 +10,23 @@ import {
   Divider,
   List,
 } from "react-native-paper";
+import { Updates } from "expo";
+import AsyncStorage from "@react-native-community/async-storage";
 import { WebView } from "react-native-webview";
 import * as Linking from "expo-linking";
 
 import { Br } from "../components";
 import GLOBAL from "../global";
 
-class HomeScreen extends React.Component {
+class SettingsScreen extends React.Component {
+  state = { username: "" };
+
+  componentDidMount() {
+    AsyncStorage.getItem("@username").then((value) => {
+      this.setState({ username: value });
+    });
+  }
+
   render() {
     return (
       // <View flex={1}>
@@ -33,25 +43,55 @@ class HomeScreen extends React.Component {
         <List.Section title="Account">
           <List.Item
             title="Log out"
-            description="Logged in as 23Y..."
+            description={"Currently logged in as " + this.state.username}
             left={() => <List.Icon icon="logout" />}
-            onPress={() => GLOBAL.app.setState({ isSignedIn: false })}
+            onPress={() => {
+              AsyncStorage.removeItem("@username");
+              GLOBAL.app.setState({ isSignedIn: false });
+            }}
           />
         </List.Section>
-        <List.Section title="About">
+        <List.Section title="Help">
+          <List.Item
+            title="Show tutorial again"
+            description="Lol puss puss"
+            left={() => <List.Icon icon="comment" />}
+            onPress={() => {
+              AsyncStorage.removeItem("@tutorial_home");
+              // AsyncStorage.removeItem("@username");
+              // AsyncStorage.removeItem("@username");
+              // AsyncStorage.removeItem("@username");
+              Updates.reload();
+            }}
+          />
           <List.Item
             title="Contact us"
-            // description="Logged in as 23Y..."
+            description="Issues or feedback"
             left={() => <List.Icon icon="help-circle" />}
             onPress={() =>
               Linking.openURL("mailto:23ylohy820c@student.ri.edu.sg")
             }
           />
+        </List.Section>
+        <List.Section title="About">
           <List.Item
             title="About"
-            // description="Logged in as 23Y..."
+            // description="About Students' Gateway"
             left={() => <List.Icon icon="information" />}
-            onPress={() => alert("beans")}
+            onPress={() =>
+              Alert.alert(
+                "About",
+                "Students Gateway\nby Loh Yu Chen & Chi Junxiang 2020\nY3 CEP Final Project\n\nBased off Parents Gateway by MOE"
+              )
+            }
+          />
+          <List.Item
+            title="View on GitHub"
+            description="Don't criticise the bad code"
+            left={() => <List.Icon icon="github-circle" />}
+            onPress={() =>
+              Linking.openURL("https://github.com/SoInstant/students-gateway")
+            }
           />
         </List.Section>
       </ScrollView>
@@ -59,4 +99,4 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default withTheme(HomeScreen);
+export default withTheme(SettingsScreen);
