@@ -48,7 +48,9 @@ const Tab = createMaterialBottomTabNavigator();
 
 TaskManager.defineTask("getNotifications", () => {
   console.log("Get notifications!");
-  return BackgroundFetch.Result.NewData;
+  fetch(apiUrl + "/getback").then((response) => {
+    return BackgroundFetch.Result.NewData;
+  });
 });
 
 export default class App extends React.Component {
@@ -68,6 +70,10 @@ export default class App extends React.Component {
   componentDidMount() {
     BackgroundFetch.registerTaskAsync("getNotifications", {
       startOnBoot: true,
+      stopOnTerminate: false,
+      minimumInterval: 60,
+    }).then(() => {
+      console.log("Registered");
     });
   }
 
