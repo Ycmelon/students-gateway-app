@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "studentsgateway-app",
-    "slug": "studentsgateway-app",
+    "name": "Students Gateway",
+    "slug": "students-gateway",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "android": {
+      "package": "ml.studentsgateway"
+    },
+    "description": ""
   }
 }
