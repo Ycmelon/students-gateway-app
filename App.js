@@ -28,8 +28,8 @@ const LightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: "#900",
-    accent: "#ADE1F5",
+    primary: "#006a49",
+    accent: "#970026",
   },
 };
 
@@ -46,12 +46,12 @@ const dark = false;
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-TaskManager.defineTask("getNotifications", () => {
-  console.log("Get notifications!");
-  fetch(apiUrl + "/getback").then((response) => {
-    return BackgroundFetch.Result.NewData;
-  });
-});
+// TaskManager.defineTask("getNotifications", () => {
+//   console.log("Get notifications!");
+//   fetch(apiUrl + "/getback").then((response) => {
+//     return BackgroundFetch.Result.NewData;
+//   });
+// });
 
 export default class App extends React.Component {
   state = { isSignedIn: false };
@@ -68,20 +68,23 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    BackgroundFetch.registerTaskAsync("getNotifications", {
-      startOnBoot: true,
-      stopOnTerminate: false,
-      minimumInterval: 60,
-    }).then(() => {
-      console.log("Registered");
-    });
+    // BackgroundFetch.registerTaskAsync("getNotifications", {
+    //   startOnBoot: true,
+    //   stopOnTerminate: false,
+    //   minimumInterval: 60,
+    // }).then(() => {
+    //   console.log("Registered");
+    // });
   }
 
   render() {
     return (
       <PaperProvider theme={dark ? DarkTheme_ : LightTheme}>
         <NavigationContainer theme={dark ? DarkTheme_ : LightTheme}>
-          <StatusBar style="light" backgroundColor="#800" />
+          <StatusBar
+            style="light" // backgroundColor="#004e2f"
+          />
+
           <Stack.Navigator
             // mode="modal"
             headerMode="screen"
@@ -123,7 +126,7 @@ export default class App extends React.Component {
                 <Stack.Screen
                   name="Tabs"
                   component={Tabs}
-                  options={{ title: "Students' Gateway" }}
+                  options={{ title: "Students Gateway" }}
                 />
                 <Stack.Screen
                   name="PostScreen"
