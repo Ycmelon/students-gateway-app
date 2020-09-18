@@ -1,21 +1,11 @@
 import React from "react";
-import { View, ScrollView, Alert, FlatList } from "react-native";
-import {
-  withTheme,
-  Card,
-  Title,
-  Subheading,
-  Text,
-  Button,
-  Divider,
-  List,
-} from "react-native-paper";
-import { Updates } from "expo";
-import AsyncStorage from "@react-native-community/async-storage";
-import { WebView } from "react-native-webview";
-import * as Linking from "expo-linking";
+import { ScrollView, Alert } from "react-native";
+import { withTheme, List } from "react-native-paper";
 
-import { Br } from "../components";
+import { Updates } from "expo";
+import * as Linking from "expo-linking";
+import AsyncStorage from "@react-native-community/async-storage";
+
 import GLOBAL from "../global";
 
 class SettingsScreen extends React.Component {
@@ -29,16 +19,6 @@ class SettingsScreen extends React.Component {
 
   render() {
     return (
-      // <View flex={1}>
-      //   <WebView
-      //     injectedJavaScript={`document.getElementsByTagName("body")[0].style.backgroundColor="#fff"`}
-      //     flex={1}
-      //     source={{
-      //       uri:
-      //         "https://docs.google.com/forms/d/e/1FAIpQLSfTLkxLiS_Ci8azarprVylecsPZECD_q10Xm2Hp2vssqqkLig/viewform?usp=sf_link",
-      //     }}
-      //   ></WebView>
-      // </View>
       <ScrollView>
         <List.Section title="Account">
           <List.Item
@@ -81,13 +61,13 @@ class SettingsScreen extends React.Component {
             onPress={() =>
               Alert.alert(
                 "About",
-                "Students Gateway\nby Loh Yu Chen & Chi Junxiang 2020\nY3 CEP Final Project\n\nBased off Parents Gateway by MOE"
+                "RI Students Gateway\nby Loh Yu Chen & Chi Junxiang 2020\nY3 CEP Final Project\n\nBased off Parents Gateway by MOE"
               )
             }
           />
           <List.Item
             title="View on GitHub"
-            description="Don't criticise the bad code"
+            description="We do not accept criticism"
             left={() => <List.Icon icon="github-circle" />}
             onPress={() =>
               Linking.openURL("https://github.com/SoInstant/students-gateway")

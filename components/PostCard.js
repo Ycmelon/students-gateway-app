@@ -9,13 +9,37 @@ import {
   Divider,
 } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Br from "./Br";
+
+function cutString(s, n) {
+  var cut = s.indexOf(" ", n);
+  if (cut == -1) return s;
+  return s.substring(0, cut);
+}
+
+class Detail extends React.PureComponent {
+  render() {
+    return (
+      <View style={{ flexDirection: "row", marginRight: 8 }}>
+        <MaterialCommunityIcons
+          name={this.props.icon}
+          size={16}
+          color="grey"
+          style={{ alignSelf: "center" }}
+        />
+        <Text style={{ color: "grey" }}>&nbsp;&nbsp;{this.props.text}</Text>
+      </View>
+    );
+  }
+}
 
 class PostCard extends React.PureComponent {
   componentDidMount() {}
 
   render() {
-    const date = new Date(this.props.post.date * 1000).toLocaleString();
+    const date = new Date(this.props.post.date_created * 1000).toLocaleString();
+    const desc = cutString(this.props.post.body.replace("\\n", ""), 100);
     return (
       <>
         <Card
@@ -50,25 +74,30 @@ class PostCard extends React.PureComponent {
               </>
             )}
 
-            <Title>{this.props.post.title}</Title>
+            <Title
+              style={{
+                textDecorationLine: this.props.post.read ? "none" : "underline",
+              }}
+            >
+              {this.props.post.title}
+            </Title>
 
-            <View style={{ flexDirection: "column" }}>
-              {this.props.post.body.split("\\n").map((line, index) => {
-                return <Text key={index}>{line}</Text>;
-              })}
-            </View>
+            <Text>
+              {desc +
+                (desc != this.props.post.body.replace("\\n", "") ? "..." : "")}
+            </Text>
+            <Text style={{ textAlign: "right", color: "grey" }}>{date}</Text>
             <Br />
             <Divider />
             <Br />
+
             <View
               style={{
                 justifyContent: "space-between",
               }}
             >
-              <Text>
-                {this.props.post.author_name} — {this.props.post.group_name}
-              </Text>
-              <Text style={{ textAlign: "right" }}>{date}</Text>
+              <Detail icon="account-edit" text={this.props.post.author_name} />
+              <Detail icon="account-group" text={this.props.post.group_name} />
             </View>
           </Card.Content>
         </Card>

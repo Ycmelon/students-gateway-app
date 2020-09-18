@@ -70,7 +70,8 @@ class HomeScreen extends React.Component {
           refreshing={this.state.refreshing}
           onEndReached={null}
           data={this.state.data}
-          renderItem={({ item }) => <PostCard key={item._id} post={item} />}
+          renderItem={({ item }) => <PostCard post={item} />}
+          keyExtractor={(item, index) => index.toString()}
         />
       </>
     );

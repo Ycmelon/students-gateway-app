@@ -22,7 +22,7 @@ class PostScreen extends React.Component {
 
   render() {
     const post = this.props.route.params.post;
-    const date = new Date(post.date * 1000).toLocaleString();
+    const date = new Date(post.date_created * 1000).toLocaleString();
 
     return (
       <View flex={1}>
@@ -82,7 +82,7 @@ class PostScreen extends React.Component {
                     style={{ alignSelf: "center", marginRight: 8 }}
                   />
                   <Text style={{ fontSize: 16, marginBottom: 4 }}>
-                    Biology Lab 1, level 3
+                    -- WIP --
                   </Text>
                 </View>
                 <View style={{ flexDirection: "row" }}>
