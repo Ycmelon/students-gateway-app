@@ -29,7 +29,7 @@ class AuthenticateScreen extends React.Component {
   webview = null;
 
   login() {
-    const username = this.state.username;
+    const username = this.state.username.toLowerCase();
     const password = this.state.password;
 
     this.setState({ error: false });
