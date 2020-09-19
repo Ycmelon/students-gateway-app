@@ -19,7 +19,7 @@ import GLOBAL from "../global";
 import { Br, PostCard } from "../components";
 
 class HomeScreen extends React.Component {
-  state = { refreshing: false, tutorialVisible: false };
+  state = { ready: false, refreshing: false, tutorialVisible: false, page: 1 };
   componentDidMount() {
     AsyncStorage.getItem("@tutorial_home").then((value) => {
       if (!value) {
@@ -29,18 +29,41 @@ class HomeScreen extends React.Component {
     this.getPosts();
   }
 
-  getPosts() {
+  getPosts(page = 1) {
     this.setState({ refreshing: true });
     fetch(
       apiUrl +
         "/posts/home?username=" +
         encodeURIComponent(GLOBAL.username) +
-        "&page=1"
+        "&page=" +
+        encodeURIComponent(page)
     ).then((response) => {
       response.json().then((responseJson) => {
-        this.setState({ data: responseJson.data, refreshing: false });
+        // console.log(responseJson);
+        if (page == 1) {
+          this.setState({
+            data: responseJson.data,
+            refreshing: false,
+            ready: true,
+          });
+        } else {
+          // console.log("Concat! " + responseJson.data.length + " " + page);
+          this.setState({
+            refreshing: false,
+            data: this.state.data.concat(responseJson.data),
+          });
+        }
       });
     });
+  }
+
+  getPostsPaginate() {
+    if (this.state.ready) {
+      console.log("Paginate");
+      this.setState({ page: this.state.page + 1 }, () =>
+        this.getPosts(this.state.page)
+      );
+    }
   }
 
   render() {
@@ -61,14 +84,15 @@ class HomeScreen extends React.Component {
               ]}
               icon={({ size }) => <Avatar.Icon size={size} icon="comment" />}
             >
-              This is the home screen: all notifications will show up here.
+              This is the home screen: All notifications will show up here.
             </Banner>
           }
           ListHeaderComponentStyle={{ margin: -16, marginBottom: 16 }}
           contentContainerStyle={{ padding: 16 }}
           onRefresh={() => this.getPosts()}
           refreshing={this.state.refreshing}
-          onEndReached={null}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => this.getPostsPaginate()}
           data={this.state.data}
           renderItem={({ item }) => <PostCard post={item} />}
           keyExtractor={(item, index) => index.toString()}
