@@ -21,6 +21,7 @@ import {
   AuthenticateScreen,
   OnboardingScreen,
   SettingsScreen,
+  TodoScreen,
 } from "./screens";
 import GLOBAL from "./global.js";
 
@@ -158,7 +159,7 @@ class Tabs extends React.Component {
         />
         <Tab.Screen
           name="Todo"
-          component={HomeScreen}
+          component={TodoScreen}
           options={{ tabBarIcon: "format-list-checkbox" }}
         />
         {

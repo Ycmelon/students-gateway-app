@@ -38,7 +38,7 @@ class SettingsScreen extends React.Component {
             left={() => <List.Icon icon="comment" />}
             onPress={() => {
               AsyncStorage.removeItem("@tutorial_home");
-              // AsyncStorage.removeItem("@username");
+              AsyncStorage.removeItem("@tutorial_todo");
               // AsyncStorage.removeItem("@username");
               // AsyncStorage.removeItem("@username");
               Updates.reload();
