@@ -77,15 +77,17 @@ class PostCard extends React.PureComponent {
               </>
             )}
 
-            <Title
+            <Text
               style={{
+                fontSize: 20,
+                fontWeight: "bold",
                 textDecorationLine: this.props.post.viewed
                   ? "none"
                   : "underline",
               }}
             >
               {this.props.post.title}
-            </Title>
+            </Text>
 
             <Text>{desc + (cut ? "..." : "")}</Text>
             <Text style={{ textAlign: "right", color: "grey" }}>{date}</Text>
