@@ -52,8 +52,8 @@ class AuthenticateScreen extends React.Component {
               if (responseJson.user_type != "admin") {
                 // Success
                 AsyncStorage.setItem("@username", username).then(() => {
-                  GLOBAL.app.setState({ isSignedIn: true });
                   GLOBAL.username = username;
+                  GLOBAL.app.setState({ isSignedIn: true });
                 });
               } else {
                 this.setState({
