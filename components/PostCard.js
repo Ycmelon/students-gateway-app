@@ -15,7 +15,7 @@ import Br from "./Br";
 function cutString(s, n) {
   var cut = s.indexOf(" ", n);
   if (cut == -1) return s;
-  return s.substring(0, cut);
+  return { desc: s.substring(0, cut), cut: s != s.substring(0, cut) };
 }
 
 class Detail extends React.PureComponent {
@@ -39,7 +39,10 @@ class PostCard extends React.PureComponent {
 
   render() {
     const date = new Date(this.props.post.date_created * 1000).toLocaleString();
-    const desc = cutString(this.props.post.body.replace("\\n", ""), 100);
+    const { desc, cut } = cutString(
+      this.props.post.body.replace(/(\r\n|\n|\r)/gm, " "),
+      100
+    );
     return (
       <>
         <Card
@@ -76,16 +79,15 @@ class PostCard extends React.PureComponent {
 
             <Title
               style={{
-                textDecorationLine: this.props.post.read ? "none" : "underline",
+                textDecorationLine: this.props.post.viewed
+                  ? "none"
+                  : "underline",
               }}
             >
               {this.props.post.title}
             </Title>
 
-            <Text>
-              {desc +
-                (desc != this.props.post.body.replace("\\n", "") ? "..." : "")}
-            </Text>
+            <Text>{desc + (cut ? "..." : "")}</Text>
             <Text style={{ textAlign: "right", color: "grey" }}>{date}</Text>
             <Br />
             <Divider />
