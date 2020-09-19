@@ -1,9 +1,9 @@
 # 👪 Students Gateway (App) - Y3 CEP Final Project
 
-![React Native](https://img.shields.io/badge/made%20with-React%20Native-900.svg)
-![GitHub licence](https://img.shields.io/github/license/Ycmelon/students-gateway-app?color=900)
+![React Native](https://img.shields.io/badge/made%20with-React%20Native-006a49.svg)
+![GitHub licence](https://img.shields.io/github/license/Ycmelon/students-gateway-app?color=006a49)
 
-Yeahhhhh!!!1!!!!!!1!11!!!!1!!!!!
+[🌐 Website/API repository](https://github.com/SoInstant/students-gateway)
 
 ## 📷 Screenshots
 
