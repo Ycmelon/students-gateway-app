@@ -1,5 +1,5 @@
 import React from "react";
-import { View, ScrollView, FlatList } from "react-native";
+import { View, ScrollView, FlatList, Image } from "react-native";
 import {
   withTheme,
   Card,
@@ -21,12 +21,14 @@ import { Br, PostCard } from "../components";
 class HomeScreen extends React.Component {
   state = { ready: false, refreshing: false, tutorialVisible: false, page: 1 };
   componentDidMount() {
-    AsyncStorage.getItem("@tutorial_home").then((value) => {
-      if (!value) {
-        this.setState({ tutorialVisible: true });
-      }
+    this.setState({ type: this.props.route.params.type }, () => {
+      AsyncStorage.getItem("@tutorial_" + this.state.type).then((value) => {
+        if (!value) {
+          this.setState({ tutorialVisible: true });
+        }
+      });
+      this.getPosts();
     });
-    this.getPosts();
   }
 
   getPosts(page = 1) {
@@ -36,7 +38,9 @@ class HomeScreen extends React.Component {
         "/posts/home?username=" +
         encodeURIComponent(GLOBAL.username) +
         "&page=" +
-        encodeURIComponent(page)
+        encodeURIComponent(page) +
+        "&todo=" +
+        (this.state.type == "todo" ? 1 : 0)
     ).then((response) => {
       response.json().then((responseJson) => {
         // console.log(responseJson);
@@ -77,25 +81,61 @@ class HomeScreen extends React.Component {
                 {
                   label: "Dismiss",
                   onPress: () => {
-                    AsyncStorage.setItem("@tutorial_home", "done");
+                    AsyncStorage.setItem(
+                      "@tutorial_" + this.state.type,
+                      "done"
+                    );
                     this.setState({ tutorialVisible: false });
                   },
                 },
               ]}
               icon={({ size }) => <Avatar.Icon size={size} icon="comment" />}
             >
-              This is the home screen: All notifications will show up here.
+              {this.state.type == "home"
+                ? "This is the home screen: All notifications will show up here."
+                : "This is the todo screen: Unread notifications / notifications you have yet to reply to will show up here."}
             </Banner>
           }
           ListHeaderComponentStyle={{ margin: -16, marginBottom: 16 }}
           contentContainerStyle={{ padding: 16 }}
-          onRefresh={() => this.getPosts()}
+          onRefresh={() =>
+            this.setState({ page: 1 }, () => {
+              this.getPosts();
+            })
+          }
           refreshing={this.state.refreshing}
           onEndReachedThreshold={0.5}
           onEndReached={() => this.getPostsPaginate()}
           data={this.state.data}
           renderItem={({ item }) => <PostCard post={item} />}
           keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
+            this.state.data ? (
+              <View
+                flex={1}
+                style={{
+                  alignContent: "center",
+                  alignSelf: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  source={require("../assets/emptystates/nice.png")}
+                  style={{ height: 200, width: 200 }}
+                />
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: 20,
+                  }}
+                >
+                  {this.state.type == "todo"
+                    ? "No pending tasks"
+                    : "No posts available"}
+                </Text>
+              </View>
+            ) : null
+          }
         />
       </>
     );

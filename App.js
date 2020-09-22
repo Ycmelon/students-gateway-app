@@ -156,11 +156,13 @@ class Tabs extends React.Component {
           name="Home"
           component={HomeScreen}
           options={{ tabBarIcon: "home" }}
+          initialParams={{ type: "home" }}
         />
         <Tab.Screen
           name="Todo"
-          component={TodoScreen}
+          component={HomeScreen}
           options={{ tabBarIcon: "format-list-checkbox" }}
+          initialParams={{ type: "todo" }}
         />
         {
           // Future
