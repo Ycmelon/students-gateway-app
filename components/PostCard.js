@@ -38,11 +38,22 @@ class PostCard extends React.PureComponent {
   componentDidMount() {}
 
   render() {
-    const date = new Date(this.props.post.date_created * 1000).toLocaleString();
+    const date_created = new Date(
+      this.props.post.date_created * 1000
+    ).toLocaleString();
+
+    var date_due;
+    if (this.props.post.date_due) {
+      date_due = new Date(this.props.post.date_due * 1000).toLocaleString();
+    } else {
+      date_due = null;
+    }
+
     const { desc, cut } = cutString(
       this.props.post.body.replace(/(\r\n|\n|\r)/gm, " "),
       100
     );
+
     return (
       <>
         <Card
@@ -53,7 +64,7 @@ class PostCard extends React.PureComponent {
           }
         >
           <Card.Content>
-            {this.props.post.dueDate && (
+            {date_due ? (
               <>
                 <View
                   style={{
@@ -70,12 +81,12 @@ class PostCard extends React.PureComponent {
                       fontWeight: "bold",
                     }}
                   >
-                    Respond by {this.props.post.dueDate}
+                    Respond by {date_due}
                   </Text>
                 </View>
                 <Br />
               </>
-            )}
+            ) : null}
 
             <Text
               style={{
@@ -90,7 +101,9 @@ class PostCard extends React.PureComponent {
             </Text>
 
             <Text>{desc + (cut ? "..." : "")}</Text>
-            <Text style={{ textAlign: "right", color: "grey" }}>{date}</Text>
+            <Text style={{ textAlign: "right", color: "grey" }}>
+              {date_created}
+            </Text>
             <Br />
             <Divider />
             <Br />

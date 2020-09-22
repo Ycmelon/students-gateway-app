@@ -22,7 +22,13 @@ class PostScreen extends React.Component {
 
   render() {
     const post = this.props.route.params.post;
-    const date = new Date(post.date_created * 1000).toLocaleString();
+    const date_created = new Date(post.date_created * 1000).toLocaleString();
+    var date_due;
+    if (post.date_due) {
+      date_due = new Date(post.date_due * 1000).toLocaleString();
+    } else {
+      date_due = null;
+    }
 
     return (
       <View flex={1}>
@@ -46,7 +52,7 @@ class PostScreen extends React.Component {
                         fontWeight: "bold",
                       }}
                     >
-                      Respond by {post.due_date}
+                      Respond by {date_due}
                     </Text>
                   </View>
                   <Br />
@@ -91,7 +97,7 @@ class PostScreen extends React.Component {
                     size={16}
                     style={{ alignSelf: "center", marginRight: 8 }}
                   />
-                  <Text style={{ fontSize: 16 }}>Posted on {date}</Text>
+                  <Text style={{ fontSize: 16 }}>Posted on {date_created}</Text>
                 </View>
               </Card.Content>
             </Card>
