@@ -7,11 +7,12 @@ import {
   Appbar,
   Button,
 } from "react-native-paper";
-import { View, ScrollView, Text } from "react-native";
+import { View, ScrollView, Text, Linking } from "react-native";
 import { Br } from "../components";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import GLOBAL from "../global";
+import HTML from "react-native-render-html";
 
 class PostScreen extends React.Component {
   state = { loading: false, response: null };
@@ -121,11 +122,30 @@ class PostScreen extends React.Component {
             <Card>
               <Card.Content>
                 <Subheading>Details</Subheading>
-                <View style={{ flexDirection: "column" }}>
+                <HTML
+                  html={post.body}
+                  renderers={{
+                    a: (
+                      htmlAttribs,
+                      children,
+                      convertedCSSStyles,
+                      passProps
+                    ) => (
+                      <Text
+                        key={htmlAttribs.href}
+                        onPress={() => Linking.openURL(htmlAttribs.href)}
+                      >
+                        {children}
+                      </Text>
+                    ),
+                  }}
+                  // imagesMaxWidth={Dimensions.get("window").width}
+                />
+                {/* <View style={{ flexDirection: "column" }}>
                   {post.body.split("\\n").map((line, index) => {
                     return <Text key={index}>{line}</Text>;
                   })}
-                </View>
+                </View> */}
               </Card.Content>
             </Card>
             {/* <Br />
