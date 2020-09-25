@@ -13,6 +13,7 @@ import {
   Appbar,
   DefaultTheme,
   DarkTheme,
+  Snackbar,
 } from "react-native-paper";
 
 import {
@@ -55,7 +56,7 @@ const Tab = createMaterialBottomTabNavigator();
 // });
 
 export default class App extends React.Component {
-  state = { isSignedIn: false };
+  state = { isSignedIn: false, snackbarVisible: false, snackbarMessage: "" };
 
   constructor(props) {
     super(props);
@@ -137,6 +138,13 @@ export default class App extends React.Component {
               </>
             )}
           </Stack.Navigator>
+          <Snackbar
+            duration={2000}
+            visible={this.state.snackbarVisible}
+            onDismiss={() => this.setState({ snackbarVisible: false })}
+          >
+            {this.state.snackbarMessage}
+          </Snackbar>
         </NavigationContainer>
       </PaperProvider>
     );
