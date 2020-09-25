@@ -58,6 +58,9 @@ class HomeScreen extends React.Component {
             data: this.state.data.concat(responseJson.data),
           });
         }
+        if (responseJson.data.length == 0) {
+          this.setState({ page: this.state.page - 1 });
+        }
       });
     });
   }
