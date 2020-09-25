@@ -11,13 +11,23 @@ import { View, ScrollView, Text } from "react-native";
 import { Br } from "../components";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
+import GLOBAL from "../global";
 
 class PostScreen extends React.Component {
-  state = { loading: false };
+  state = { loading: false, response: null };
+  // response: null (unanswered), true (Yes), false (No)
+  // confirmedResponse: Response is submitted to API
 
   postResponse(response) {
-    this.setState({ loading: true });
-    console.log(response);
+    this.setState({ loading: true, response: response });
+
+    setTimeout(() => {
+      GLOBAL.app.setState({
+        snackbarVisible: true,
+        snackbarMessage: "Successfully submitted response!",
+      });
+      this.setState({ loading: false, confirmedResponse: true });
+    }, 2000);
   }
 
   render() {
@@ -36,27 +46,30 @@ class PostScreen extends React.Component {
           <View style={{ margin: 16 }}>
             <Card>
               <Card.Content>
-                <>
-                  <View
-                    style={{
-                      backgroundColor: "red",
-                      alignSelf: "flex-start",
-                      paddingHorizontal: 8,
-                      paddingVertical: 4,
-                      borderRadius: 4,
-                    }}
-                  >
-                    <Text
+                {date_due ? (
+                  <>
+                    <View
                       style={{
-                        color: "white",
-                        fontWeight: "bold",
+                        backgroundColor: "red",
+                        alignSelf: "flex-start",
+                        paddingHorizontal: 8,
+                        paddingVertical: 4,
+                        borderRadius: 4,
                       }}
                     >
-                      Respond by {date_due}
-                    </Text>
-                  </View>
-                  <Br />
-                </>
+                      <Text
+                        style={{
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Respond by {date_due}
+                      </Text>
+                    </View>
+                    <Br />
+                  </>
+                ) : null}
+
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                   {post.title}
                 </Text>
@@ -127,40 +140,47 @@ class PostScreen extends React.Component {
               />
             </Card> */}
             <Br />
-            <Card>
-              <Card.Content>
-                {/* <Subheading>Response</Subheading> */}
-                <View style={{ flexDirection: "row" }}>
-                  {false ? (
-                    <Text>You've responded with: Yes</Text>
-                  ) : (
-                    <>
-                      <Button
-                        flex={1}
-                        mode="outlined"
-                        style={{ marginRight: 16 }}
-                        icon="check"
-                        onPress={() => this.postResponse(true)}
-                        disabled={this.state.loading}
-                        loading={this.state.loading}
-                      >
-                        Yes
-                      </Button>
-                      <Button
-                        flex={1}
-                        mode="outlined"
-                        icon="close"
-                        onPress={() => this.postResponse(false)}
-                        disabled={this.state.loading}
-                        loading={this.state.loading}
-                      >
-                        No
-                      </Button>
-                    </>
-                  )}
-                </View>
-              </Card.Content>
-            </Card>
+            {post.requires_acknowledgement ? (
+              <Card>
+                <Card.Content>
+                  {/* <Subheading>Response</Subheading> */}
+                  <View style={{ flexDirection: "row" }}>
+                    {this.state.confirmedResponse ? (
+                      <Text>
+                        You've responded with:{" "}
+                        <Text style={{ fontWeight: "bold" }}>
+                          {this.state.response ? "Yes" : "No"}
+                        </Text>
+                      </Text>
+                    ) : (
+                      <>
+                        <Button
+                          flex={1}
+                          mode="outlined"
+                          style={{ marginRight: 16 }}
+                          icon="check"
+                          onPress={() => this.postResponse(true)}
+                          disabled={this.state.loading}
+                          loading={this.state.response == true}
+                        >
+                          Yes
+                        </Button>
+                        <Button
+                          flex={1}
+                          mode="outlined"
+                          icon="close"
+                          onPress={() => this.postResponse(false)}
+                          disabled={this.state.loading}
+                          loading={this.state.response == false}
+                        >
+                          No
+                        </Button>
+                      </>
+                    )}
+                  </View>
+                </Card.Content>
+              </Card>
+            ) : null}
           </View>
         </ScrollView>
       </View>
