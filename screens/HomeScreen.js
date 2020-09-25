@@ -21,6 +21,7 @@ import { Br, PostCard } from "../components";
 class HomeScreen extends React.Component {
   state = { ready: false, refreshing: false, tutorialVisible: false, page: 1 };
   componentDidMount() {
+    // Get whether home or todo screen
     this.setState({ type: this.props.route.params.type }, () => {
       AsyncStorage.getItem("@tutorial_" + this.state.type).then((value) => {
         if (!value) {
@@ -63,7 +64,7 @@ class HomeScreen extends React.Component {
 
   getPostsPaginate() {
     if (this.state.ready) {
-      console.log("Paginate");
+      console.log("Paginate " + this.state.page);
       this.setState({ page: this.state.page + 1 }, () =>
         this.getPosts(this.state.page)
       );
@@ -104,11 +105,14 @@ class HomeScreen extends React.Component {
             })
           }
           refreshing={this.state.refreshing}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.1}
           onEndReached={() => this.getPostsPaginate()}
           data={this.state.data}
           renderItem={({ item }) => <PostCard post={item} />}
           keyExtractor={(item, index) => index.toString()}
+          ListFooterComponent={
+            <ActivityIndicator animating={this.state.refreshing} />
+          }
           ListEmptyComponent={
             this.state.data ? (
               <View
