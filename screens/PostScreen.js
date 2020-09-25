@@ -81,16 +81,19 @@ class PostScreen extends React.Component {
                     {post.group_name}
                   </Text>
                 </View>
-                <View style={{ flexDirection: "row" }}>
-                  <MaterialCommunityIcons
-                    name="map-marker"
-                    size={16}
-                    style={{ alignSelf: "center", marginRight: 8 }}
-                  />
-                  <Text style={{ fontSize: 16, marginBottom: 4 }}>
-                    -- WIP --
-                  </Text>
-                </View>
+                {post.location ? (
+                  <View style={{ flexDirection: "row" }}>
+                    <MaterialCommunityIcons
+                      name="map-marker"
+                      size={16}
+                      style={{ alignSelf: "center", marginRight: 8 }}
+                    />
+                    <Text style={{ fontSize: 16, marginBottom: 4 }}>
+                      {post.location}
+                    </Text>
+                  </View>
+                ) : null}
+
                 <View style={{ flexDirection: "row" }}>
                   <MaterialCommunityIcons
                     name="calendar"
