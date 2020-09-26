@@ -64,7 +64,7 @@ class PostCard extends React.PureComponent {
           }
         >
           <Card.Content>
-            {date_due ? (
+            {date_due && this.props.post.acknowledged === null ? (
               <>
                 <View
                   style={{

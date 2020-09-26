@@ -13,22 +13,60 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { WebView } from "react-native-webview";
 import GLOBAL from "../global";
 import HTML from "react-native-render-html";
+import { apiUrl } from "../constants";
 
 class PostScreen extends React.Component {
   state = { loading: false, response: null };
   // response: null (unanswered), true (Yes), false (No)
   // confirmedResponse: Response is submitted to API
+  componentDidMount() {
+    this.setState(
+      {
+        post: this.props.route.params.post,
+        confirmedResponse: this.props.route.params.post.acknowledged !== null,
+        response: this.props.route.params.post.acknowledged,
+      },
+      () => {
+        if (!this.state.post.viewed) {
+          fetch(
+            apiUrl +
+              "/posts/view?id=" +
+              encodeURIComponent(this.state.post._id["$oid"]) +
+              "&username=" +
+              encodeURIComponent(GLOBAL.username)
+          ).then((response) => {
+            response.json().then((responseJson) => {
+              console.log(responseJson);
+            });
+          });
+        }
+      }
+    );
+  }
 
   postResponse(response) {
     this.setState({ loading: true, response: response });
-
-    setTimeout(() => {
-      GLOBAL.app.setState({
-        snackbarVisible: true,
-        snackbarMessage: "Successfully submitted response!",
+    fetch(
+      apiUrl +
+        "/posts/respond?id=" +
+        encodeURIComponent(this.state.post._id["$oid"]) +
+        "&username=" +
+        encodeURIComponent(GLOBAL.username) +
+        "&response=" +
+        encodeURIComponent(response)
+    ).then((response_) => {
+      response_.json().then((responseJson) => {
+        GLOBAL.app.setState({
+          snackbarVisible: true,
+          snackbarMessage: responseJson.message,
+        });
+        this.setState({
+          loading: false,
+          response: null,
+          confirmedResponse: response_.status == 200,
+        });
       });
-      this.setState({ loading: false, confirmedResponse: true });
-    }, 2000);
+    });
   }
 
   render() {
