@@ -166,11 +166,9 @@ class PostScreen extends React.Component {
                   {/* <Subheading>Response</Subheading> */}
                   <View style={{ flexDirection: "row" }}>
                     {this.state.confirmedResponse ? (
-                      <Text>
+                      <Text style={{ flexDirection: "row" }}>
                         You've responded with:{" "}
-                        <Text style={{ fontWeight: "bold" }}>
-                          {this.state.response ? "Yes" : "No"}
-                        </Text>
+                        {this.state.response ? "Yes" : "No"}
                       </Text>
                     ) : (
                       <>
