@@ -33,7 +33,7 @@ Then, run `npm start` and follow the instructions
 
 ### Ready made
 
-[.APK download (WIP)](example.com) / [Expo project](https://expo.io/@ycmelon/students-gateway)
+[Browser simulator](https://expo.io/appetize-simulator?url=https://expo.io/@ycmelon/students-gateway) / [Expo project](https://expo.io/@ycmelon/students-gateway)
 
 ## 📃  License
 
