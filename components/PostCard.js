@@ -14,7 +14,7 @@ import Br from "./Br";
 
 function cutString(s, n) {
   var cut = s.indexOf(" ", n);
-  if (cut == -1) return s;
+  if (cut == -1) return { desc: s, cut: false };
   return { desc: s.substring(0, cut), cut: s != s.substring(0, cut) };
 }
 
