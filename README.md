@@ -2,6 +2,7 @@
 
 ![React Native](https://img.shields.io/badge/made%20with-React%20Native-006a49.svg)
 ![GitHub licence](https://img.shields.io/github/license/Ycmelon/students-gateway-app?color=006a49)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-006a49.svg)](https://github.com/prettier/prettier)
 
 [ [Website/API](https://github.com/SoInstant/students-gateway) | App ]
 
