@@ -17,6 +17,7 @@ import { WebView } from "react-native-webview";
 import { apiUrl } from "../constants";
 import GLOBAL from "../global";
 import { Br, PostCard } from "../components";
+import { useScrollToTop } from "@react-navigation/native";
 
 class HomeScreen extends React.Component {
   state = { ready: false, refreshing: false, tutorialVisible: false, page: 1 };
@@ -78,6 +79,7 @@ class HomeScreen extends React.Component {
     return (
       <>
         <FlatList
+          ref={this.props.scrollRef}
           ListHeaderComponent={
             <Banner
               visible={this.state.tutorialVisible}
@@ -149,4 +151,9 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default withTheme(HomeScreen);
+export default function (props) {
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
+
+  return <HomeScreen {...props} scrollRef={ref} />;
+}
