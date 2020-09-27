@@ -15,6 +15,9 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { WebView } from "react-native-webview";
 import { apiUrl } from "../constants";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 
 import { Br } from "../components";
 import GLOBAL from "../global";
@@ -51,6 +54,17 @@ class AuthenticateScreen extends React.Component {
             if (response.status == 200) {
               if (responseJson.user_type != "admin") {
                 // Success
+                registerForPushNotificationsAsync().then((token) =>
+                  fetch(
+                    apiUrl +
+                      "/users/setExpoPushToken?username=" +
+                      encodeURIComponent(username) +
+                      "&push_token=" +
+                      encodeURIComponent(token)
+                  ).then((response) => {
+                    console.log(response.status);
+                  })
+                );
                 AsyncStorage.setItem("@username", username).then(() => {
                   GLOBAL.username = username;
                   GLOBAL.app.setState({ isSignedIn: true });
@@ -118,3 +132,36 @@ class AuthenticateScreen extends React.Component {
 }
 
 export default withTheme(AuthenticateScreen);
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
